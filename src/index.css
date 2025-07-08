@@ -1,1 +1,35 @@
 @import "tailwindcss";
+
+@plugin "daisyui" {
+  themes: light --default;
+}
+
+@theme {
+  --color-primary: #ac0823;
+  /* A single custom color */
+  --color-secondary: #bd0926;
+  /* Another single custom color */
+
+  /* You can also define color scales like Tailwind's defaults */
+  --color-noirRed-50: #fef2f2;
+  --color-noirRed-100: #fee2e2;
+  --color-noirRed-200: #fecaca;
+  --color-noirRed-300: #fca5a5;
+  --color-noirRed-400: #f87171;
+  --color-noirRed-500: #ef4444;
+  --color-noirRed-600: #dc2626;
+  --color-noirRed-700: #b91c1c;
+  --color-noirRed-800: #991b1b;
+  --color-noirRed-900: #7f1d1d;
+  --color-noirRed-950: #450a0a;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+  /* Hides the scrollbar */
+}
+
+.hide-scrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;     /* Firefox */
+}

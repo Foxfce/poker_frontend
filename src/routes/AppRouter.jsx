@@ -1,11 +1,13 @@
 import { Suspense } from "react";
 import { createBrowserRouter, Navigate, RouterProvider } from "react-router"
+import TableSession from "../pages/tables/TableSession";
 
 
 
 const guestRouter = createBrowserRouter([
     { path: '/', element: <div>LOG IN</div> },
     { path: '/news', element: <div>NEWS</div> },
+    { path: '/table', element: <TableSession /> },
     { path: '*', element: <Navigate to='/' replace /> },
 ]);
 
@@ -15,6 +17,8 @@ const userRouter = createBrowserRouter([
         children: [
             { index: true, element: <div>HOME</div> },
             { path: '/profile', element: <div>FRIENDS</div> },
+            { path: '/profile', element: <div>FRIENDS</div> },
+            { path: '/table', element: <TableSession /> },
             { path: '*', element: <Navigate to='/' replace /> },
         ]
     },
@@ -22,7 +26,7 @@ const userRouter = createBrowserRouter([
 
 
 function AppRouter() {
-    const user = 'useUserStore';
+    const user = '';
     const finalRouter = user ? userRouter : guestRouter;
 
     return (

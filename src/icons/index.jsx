@@ -1,4 +1,87 @@
- export function Send(props) {
+import acLogo from '../assets/ac_logo.png';
+
+export function Next(props) {
+  return (
+    <svg
+      fill="#fff"
+      viewBox="0 0 512 512"
+      data-name="Layer 1"
+      xmlns="http://www.w3.org/2000/svg"
+      stroke="#fff"
+      strokeWidth={20.48}
+      {...props}
+    >
+      <path d="M214.78 478l-20.67-21.57L403.27 256 194.11 55.57 214.78 34l231.68 222zm103.11-222L86.22 34 65.54 55.57 274.7 256 65.54 456.43 86.22 478z" />
+    </svg>
+  )
+}
+
+export function Diamond(props) {
+  return (
+    <svg
+      viewBox="0 -0.5 17 17"
+      xmlns="http://www.w3.org/2000/svg"
+      className="si-glyph si-glyph-diamond"
+      {...props}
+    >
+      <path
+        d="M7.93 15.644L3.34 8.796a1.162 1.162 0 01-.002-1.641L7.904.323a1.162 1.162 0 011.642.002l4.54 6.85a1.16 1.16 0 01.004 1.641l-4.518 6.83s-1.187.451-1.642-.002z"
+        fill="#dc2626"
+        className="si-glyph-fill"
+        fillRule="evenodd"
+      />
+    </svg>
+  )
+}
+
+export function Heart(props) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      {...props}
+    >
+      <path fill="#fff" d="M0 0H24V24H0z" />
+      <path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M5.361 3.47A5.127 5.127 0 017.5 3c.737 0 1.464.16 2.139.47.674.309 1.28.759 1.785 1.318a.777.777 0 001.152 0C13.598 3.658 15.006 3 16.5 3c1.493 0 2.902.657 3.924 1.788C21.443 5.915 22 7.424 22 8.979c0 1.555-.557 3.064-1.576 4.192l-6.198 6.858a3 3 0 01-4.452 0L3.576 13.17a6.043 6.043 0 01-1.17-1.936A6.443 6.443 0 012 8.98c0-.772.137-1.538.406-2.256a6.044 6.044 0 011.17-1.935A5.5 5.5 0 015.361 3.47z"
+        fill="#dc2626"
+      />
+    </svg>
+  )
+}
+
+export function Spade(props) {
+  return (
+    <svg viewBox="0 0 56 56" xmlns="http://www.w3.org/2000/svg" {...props}>
+      <path d="M6.004 33.215c0 5.578 4.312 9.914 9.914 9.914 3.117 0 6.305-1.031 7.687-3.773h.235c0 3.117-3.422 5.695-4.805 7.148-1.688 1.758-.656 4.195 1.523 4.195h14.883c2.156 0 3.188-2.437 1.5-4.195-1.383-1.453-4.804-4.031-4.804-7.148h.257c1.36 2.742 4.57 3.773 7.665 3.773 5.601 0 9.937-4.336 9.937-9.914 0-10.5-13.969-14.93-19.57-26.227-.469-.96-1.196-1.687-2.438-1.687-1.242 0-1.945.726-2.437 1.687C19.949 18.285 6.004 22.715 6.004 33.215z" />
+    </svg>
+  )
+}
+
+export function Club(props) {
+  return (
+    <svg
+      fill="#000"
+      viewBox="0 0 256 256"
+      xmlns="http://www.w3.org/2000/svg"
+      {...props}
+    >
+      <path d="M232 148a52.005 52.005 0 01-80.459 43.525l10.654 34.088A8 8 0 01154.559 236h-53.118a8 8 0 01-7.635-10.387l10.649-34.071a51.705 51.705 0 01-29.963 8.437c-27.726-.786-50.377-24.005-50.492-51.76A52 52 0 0176 96q2.029 0 4.049.156a52.003 52.003 0 1195.896 0 53.336 53.336 0 015.464-.137A51.703 51.703 0 01232 148z" />
+    </svg>
+  )
+}
+
+
+export function Logo(props) {
+  return (
+      <img src={acLogo} alt="logo" {...props} />
+  )
+}
+
+export function Send(props) {
   return (
     <svg
       viewBox="0 0 24 24"

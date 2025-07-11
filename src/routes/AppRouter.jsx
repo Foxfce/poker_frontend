@@ -16,8 +16,8 @@ const userRouter = createBrowserRouter([
         path: '/', element: <div>USER LAYOUT</div>,
         children: [
             { index: true, element: <div>HOME</div> },
-            { path: '/profile', element: <div>FRIENDS</div> },
-            { path: '/profile', element: <div>FRIENDS</div> },
+            { path: '/profile', element: <div>PROFILE</div> },
+            { path: '/tournament', element: <div>TOURNAMENT</div> },
             { path: '/table', element: <TableSession /> },
             { path: '*', element: <Navigate to='/' replace /> },
         ]

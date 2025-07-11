@@ -1,75 +1,84 @@
-import { useEffect, useRef } from "react"
-import ChatBox from "../../components/chattable/ChatBox"
-import Participant from "../../components/table/Participant"
-import { Microphone, Send } from "../../icons"
+import ChatPanel from "../../components/chatTable/ChatPanel"
+import pokertable from '../../assets/Poker_table_red.jpg'
+import CardFace from "../../components/table/CardFace"
+import { useCardStore } from "../../stores/cardStore"
+import PlayerStat from "../../components/table/PlayerStat"
+import { useEffect } from "react"
+import PlayerAction from "../../components/table/PlayerAction"
 
 function TableSession() {
-    const ref = useRef();
+    const community_card = useCardStore(state => state.community_card);
+    const checkWinner = useCardStore(state => state.checkWinner);
+
+
+
 
     useEffect(() => {
-        ref.current.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        checkWinner();
     }, [])
 
     return (
-        <div className="flex h-screen w-screen bg-black">
+        <div className="flex h-screen w-screen overflow-hidden">
+            <div className="h-full w-full absolute bg-black z-[-1]" />
+            <img src={pokertable} alt="table" className="absolute h-full w-1/1 -translate-x-1/2 z-[-1]" />
+
             {/* Game Section */}
-            <div className="flex grow-4 bg-gray-900 min-w-[375px]">
-                TableSession
+            <div className={`flex grow-4 min-w-[375px] relative`}>
+
+                <div className="absolute top-5/6 left-1/8 flex items-center h-fit w-fit">
+                    <PlayerStat id='AbsH' playerNumber='1' />
+                </div>
+                <div className="absolute top-2/9 left-1/8 flex items-center h-fit w-fit">
+                    <PlayerStat id='AbsL' playerNumber='2' />
+                </div>
+                <div className="absolute top-2/6 left-1/2 flex items-center h-fit w-fit">
+                    <PlayerStat id='AbsS' playerNumber='3' />
+                </div>
+                <div className="absolute top-4/6 left-1/2 flex items-center h-fit w-fit">
+                    <PlayerStat id={null} playerNumber='4' />
+                </div>
+
+                {/* Community Card */}
+                <div className="absolute top-3/8 left-1/15 flex flex-col gap-2 items-center h-fit w-fit">
+                    {/* POT */}
+                    <div className="flex justify-center py-1 px-16 rounded-full bg-black ">
+                        <span className="text-amber-400 font-bold text-2xl">{'Pot : 1000'}</span>
+                    </div>
+
+                    {/* Community Card */}
+                    <div className="flex gap-4">
+                        {community_card.map((el, index) => <CardFace key={(index + 1)} cardRank={el} />)}
+                    </div>
+
+                    {/* Game Stat */}
+                    <div className="flex gap-4 justify-center py-1 px-16 rounded-full bg-black ">
+                        <span className="text-white font-bold text-xl">#</span>
+                        <span className="text-amber-400 font-bold text-xl">Your Turn</span>
+                        <span className="text-white font-bold text-xl">Deals</span>
+                        <span className="text-amber-400 font-bold text-xl">1</span>
+                        <span className="text-white font-bold text-xl">Rounds</span>
+                        <span className="text-amber-400 font-bold text-xl">1</span>
+                    </div>
+                </div>
+                {/* Community Card */}
+
+                {/*Player Action button */}
+                <div className="absolute bottom-1/15 left-1/2">
+                    <PlayerAction />
+                </div>
+                {/*Player Action button */}
+
+
 
             </div>
+            {/* Game Section */}
 
             {/* Chat Section */}
-            <div className="flex bg-violet-500 grow-1 p-4 max-w-[680px]">
-                <div className="flex flex-col w-full gap-2">
-                    <div className="flex justify-center items-center bg-gradient-to-r from-noirRed-400 to-noirRed-600 h-12 w-fit rounded-full px-6">
-                        <span className="text-xl font-bold text-gray-200">Participant</span>
-                    </div>
-
-                    {/* Participant logo */}
-                    <div className="flex items-center gap-4 bg-gray-400 w-full h-fit py-4 px-4">
-
-                        <Participant className='w-18 rounded-full bg-gray-200' />
-                        <Participant className='w-18 rounded-full bg-gray-200' />
-                        <Participant className='w-18 rounded-full bg-gray-200' />
-
-                    </div>
-
-                    {/* Chat Panel */}
-                    <div className="flex flex-col justify-end grow-1 min-h-[360px] bg-gray-900 w-full rounded-4xl px-8 py-4">
-                        <div className="flex flex-col h-fit max-h-full w-full gap-4 overflow-y-auto text-white">
-                            <ChatBox />
-                            <ChatBox message='hello' />
-                            <div ref={ref} />
-                        </div>
-                    </div>
-
-
-                    <div className="flex justify-between w-full h-18 gap-2">
-
-                        <div className="flex items-center justify-center avatar h-full aspect-square bg-gray-900 rounded-full hover:bg-gray-800 cursor-pointer">
-                            <Microphone className='w-12' />
-                        </div>
-
-                        <div className="flex w-full bg-gray-900 h-full rounded-full px-6 py-4 overflow-y-auto ">
-                            <textarea
-                                className="text-gray-50 text-2xl font-semibold w-full break-words resize-none focus:outline-none hide-scrollbar"
-                                value='hatsosojoooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
-                                Chatsosojoooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
-                                Chatsosojoooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
-                                Chatsosojoooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo'
-                            />
-                        </div>
-
-                        <div className="flex items-center justify-center avatar h-full aspect-square bg-gray-900 rounded-full hover:bg-gray-800 cursor-pointer">
-                            <Send className='w-12' />
-                        </div>
-
-                    </div>
-
-                </div>
+            <div className="flex bg-violet-500 grow-1 p-4 min-w-[375px] max-w-[680px]">
+                <ChatPanel />
             </div>
 
-        </div>
+        </div >
     )
 }
 

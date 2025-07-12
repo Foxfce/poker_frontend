@@ -5,11 +5,18 @@ import { useCardStore } from "../../stores/cardStore"
 import PlayerStat from "../../components/table/PlayerStat"
 import { useEffect } from "react"
 import PlayerAction from "../../components/table/PlayerAction"
+import EmptySeat from "../../components/table/EmptySeat"
+import { useSeatStore } from "../../stores/seatStore"
+import { useGameStore } from "../../stores/gameStore"
+import { useUserStore } from "../../stores/userStore"
 
 function TableSession() {
-    const community_card = useCardStore(state => state.community_card);
-    const checkWinner = useCardStore(state => state.checkWinner);
-
+    const user = useUserStore(state => state.user);
+    const community_card = useCardStore(state => state?.community_card);
+    const checkWinner = useCardStore(state => state?.checkWinner);
+    const tableSeat = useSeatStore(state => state?.tableSeat);
+    const gameRound = useGameStore(state => state?.round);
+    const playerTurn = useGameStore(state => state?.player_turn);
 
 
 
@@ -26,16 +33,16 @@ function TableSession() {
             <div className={`flex grow-4 min-w-[375px] relative`}>
 
                 <div className="absolute top-5/6 left-1/8 flex items-center h-fit w-fit">
-                    <PlayerStat id='AbsH' playerNumber='1' />
+                    {tableSeat[0] ? <PlayerStat id={tableSeat[0]} playerNumber='1' /> : (gameRound || <EmptySeat seatNumber='1' />)}
                 </div>
                 <div className="absolute top-2/9 left-1/8 flex items-center h-fit w-fit">
-                    <PlayerStat id='AbsL' playerNumber='2' />
+                    {tableSeat[1] ? <PlayerStat id={tableSeat[1]} playerNumber='2' /> : (gameRound || <EmptySeat seatNumber='2' />)}
                 </div>
                 <div className="absolute top-2/6 left-1/2 flex items-center h-fit w-fit">
-                    <PlayerStat id='AbsS' playerNumber='3' />
+                    {tableSeat[2] ? <PlayerStat id={tableSeat[2]} playerNumber='3' /> : (gameRound || <EmptySeat seatNumber='3' />)}
                 </div>
                 <div className="absolute top-4/6 left-1/2 flex items-center h-fit w-fit">
-                    <PlayerStat id={null} playerNumber='4' />
+                    {tableSeat[3] ? <PlayerStat id={tableSeat[3]} playerNumber='4' /> : (gameRound || <EmptySeat seatNumber='4' />)}
                 </div>
 
                 {/* Community Card */}
@@ -64,7 +71,7 @@ function TableSession() {
 
                 {/*Player Action button */}
                 <div className="absolute bottom-1/15 left-1/2">
-                    <PlayerAction />
+                    {(user?.player_id === playerTurn) && <PlayerAction />}
                 </div>
                 {/*Player Action button */}
 

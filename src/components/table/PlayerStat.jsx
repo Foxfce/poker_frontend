@@ -3,14 +3,17 @@ import { useCardStore } from '../../stores/cardStore'
 import CardFace from './CardFace'
 import Participant from './Participant'
 import { usePlayerStore } from '../../stores/playerStore';
+import { useGameStore } from '../../stores/gameStore';
 
 function PlayerStat(props) {
     const { id, playerNumber } = props
     const player = usePlayerStore(state => state.players.find((player) => player?.id === id))//player.id === id ? player : null)
-    
+
     const player_card = useCardStore(state => state[`player${playerNumber}`]);
     const handValue = useCardStore(state => state[`player${playerNumber}_rank`]);
     const evaluatedHand = useCardStore(state => state.evaluatedHand);
+
+    const playerTurn = useGameStore(state => state?.player_turn);
 
     useEffect(() => {
         evaluatedHand(playerNumber);
@@ -20,8 +23,9 @@ function PlayerStat(props) {
     return (
         <>
             {/* Picture */}
-            < div >
+            <div className='relative'>
                 <Participant imgSrc={player?.image} className='w-26 rounded-full bg-gray-200' />
+                {(playerTurn === player.id) && <div className='absolute -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 w-full h-full border rounded-full border-amber-400 border-6' />}
             </div >
 
             {/* Stat */}

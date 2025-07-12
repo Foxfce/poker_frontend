@@ -5,15 +5,11 @@ export const useGameStore = create(
     persist(
         (set, get) => ({
             // Mocking Data can delete
-            round: null,
-            card_revealed: 3,
-            current_pot: 1,
-            current_bet: 100,
-            player: [1, 2, 3, 4],
-            call_player: [],
-            fold_player: [],
-            player_turn: 'AbsH', // will take turn if user.player_id != player_turn prevent emit action
-            winner: null,
+            pot :{
+                pot_number: 1,
+                price: 2000,
+                participant: [1, 2, 3, 4],
+            },
             updateGameState: (data) => {
                 set({
                     round: data.round,
@@ -34,21 +30,6 @@ export const useGameStore = create(
             updateCurrentBet: (currentBet) => {
                 set({ current_bet: currentBet });
                 console.log('Game update current bet to :', get().current_bet);
-            },
-            updateCallPlayer: (tableId) => {
-                set({ call_player: { ...get().call_player, tableId } });
-            },
-            updateFoldPlayer: (tableId) => {
-                set({ fold_player: tableId });
-            },
-            callPlayerReAction: (tableId) => {
-                set({ fold_player: { ...get().player, tableId } });
-            },
-            updatePlayerTurn: (playerId) => {
-                set({ player_turn: playerId });
-            },
-            updateWinner: (userId) => {
-                set({ winner: userId });
             },
             resetState: () => {
                 set({

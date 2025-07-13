@@ -17,7 +17,7 @@ export const useGameStore = create(
                     participant: [1, 2, 3, 4],
                 },
             ],
-            pot_number: 1,
+            pot_number: 1, //current pot for easier update and when need to add more pot update pot function
             price: 2000,
             participant: [1, 2, 3, 4],
             updatePotState: (data) => {

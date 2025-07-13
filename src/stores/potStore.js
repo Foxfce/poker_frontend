@@ -5,23 +5,23 @@ export const useGameStore = create(
     persist(
         (set, get) => ({
             // Mocking Data can delete
-            pot :{
-                pot_number: 1,
-                price: 2000,
-                participant: [1, 2, 3, 4],
-            },
-            updateGameState: (data) => {
-                set({
-                    round: data.round,
-                    card_revealed: data.card_revealed,
-                    current_pot: data.current_pot,
-                    current_bet: data.current_bet,
-                    player: data.player,
-                    call_player: data.call_player,
-                    fold_player: data.fold_player,
-                    player_turn: data.player_turn,
-                    winner: null,
-                })
+            pot: [
+                {
+                    pot_number: 1,
+                    price: 2000,
+                    participant: [1, 2, 3, 4],
+                },
+                {
+                    pot_number: 1,
+                    price: 2000,
+                    participant: [1, 2, 3, 4],
+                },
+            ],
+            pot_number: 1,
+            price: 2000,
+            participant: [1, 2, 3, 4],
+            updatePotState: (data) => {
+                set({ pot: data })
             },
             updatePot: (potNumber) => {
                 set({ current_pot: potNumber });

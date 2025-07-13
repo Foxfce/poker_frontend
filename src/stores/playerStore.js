@@ -18,7 +18,7 @@ export const usePlayerStore = create(
                 pocket: 1500,
             },{
                 id: 'AbsS',
-                tableId: null,
+                tableId: 3,
                 name: 'john',
                 image: 'https://thumbs.dreamstime.com/b/alpaca-funny-face-looking-camera-closeup-petting-zoo-bad-teeth-109883330.jpg',
                 pocket: 1500,

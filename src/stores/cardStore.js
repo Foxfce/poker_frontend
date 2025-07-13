@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
+import { usePlayerStore } from "./playerStore";
 const { Hand } = await import('pokersolver');
 
 export const useCardStore = create(
@@ -8,8 +9,8 @@ export const useCardStore = create(
             community_card: ["2s", "3s", "4s", "9h", "8c"],
             player1: ["Js", "Ts"],
             player2: ["2h", "2c"],
-            player3: ["Jd", "Kd"],
-            player4: ["Qs", "Ks"],
+            player3: ["Qs", "Ks"],
+            player4: [null, null],
             player1_rank: null,
             player2_rank: null,
             player3_rank: null,
@@ -45,20 +46,21 @@ export const useCardStore = create(
             },
             // This checkWinner can possibly run at Server
             checkWinner: (participants) => {
-                const participant = [3, 4] // Delete this and have participants as player with checkWinner([seatId, seatId])
                 const commuCard = get().community_card;
 
-                const inputHand = participant.map((playerNumber) => {
+                const inputHand = participants.map((playerNumber) => {
                     const hand = Hand.solve(([...commuCard, ...(get()[`player${playerNumber}`])]).filter(value => value !== null));
                     hand.playerNumber = playerNumber;
                     return hand
                 })
 
-                const winner = Hand.winners(inputHand);
+                const winnerTableId = (Hand.winners(inputHand))[0].playerNumber;
 
-                console.log('winner is player :', winner[0].playerNumber);
+                const players = usePlayerStore.getState().players
 
-                return winner[0].playerNumber;
+                const winner = players.find((player) => player?.tableId === winnerTableId); // (player) => player?.tableId === winnerTableId
+                console.log(winner);
+                return winner
             },
         }), {
         name: 'cardState',

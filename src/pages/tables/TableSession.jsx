@@ -9,20 +9,27 @@ import EmptySeat from "../../components/table/EmptySeat"
 import { useSeatStore } from "../../stores/seatStore"
 import { useGameStore } from "../../stores/gameStore"
 import { useUserStore } from "../../stores/userStore"
+import { useParams } from "react-router"
+import { usePlayerStore } from "../../stores/playerStore"
 
 function TableSession() {
+    const { tableId } = useParams();
+
     const user = useUserStore(state => state.user);
     const community_card = useCardStore(state => state?.community_card);
-    const checkWinner = useCardStore(state => state?.checkWinner);
     const tableSeat = useSeatStore(state => state?.tableSeat);
     const gameRound = useGameStore(state => state?.round);
     const playerTurn = useGameStore(state => state?.player_turn);
+    const checkWinner = useCardStore(state => state.checkWinner);
+
+    const players = usePlayerStore(state => state?.players);
 
 
 
     useEffect(() => {
-        checkWinner();
-    }, [])
+
+        checkWinner([1, 2, 3, 4]);
+    }, []);
 
     return (
         <div className="flex h-screen w-screen overflow-hidden">

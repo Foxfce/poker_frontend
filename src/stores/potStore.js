@@ -1,51 +1,49 @@
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
-export const useGameStore = create(
+export const usePotStore = create(
     persist(
         (set, get) => ({
             // Mocking Data can delete
-            pot: [
-                {
-                    pot_number: 1,
-                    price: 2000,
-                    participant: [1, 2, 3, 4],
-                },
-                {
-                    pot_number: 1,
-                    price: 2000,
-                    participant: [1, 2, 3, 4],
-                },
-            ],
-            pot_number: 1, //current pot for easier update and when need to add more pot update pot function
-            price: 2000,
-            participant: [1, 2, 3, 4],
+            pot: [],
+            current_pot_price: null,
             updatePotState: (data) => {
+                set({ current_pot_price: data })
+            },
+            updateSidePotState: (data) => {
                 set({ pot: data })
             },
-            updatePot: (potNumber) => {
-                set({ current_pot: potNumber });
-                console.log('Game update current pot to :', get().current_pot);
+            updatePot: (betPrice) => {
+                set(state => ({ current_pot_price: state.current_pot_price + betPrice }));
+                console.log('update current pot to :', get().current_pot);
             },
             updateCurrentBet: (currentBet) => {
                 set({ current_bet: currentBet });
                 console.log('Game update current bet to :', get().current_bet);
             },
-            resetState: () => {
+            resetPotState: () => {
                 set({
-                    round: null,
-                    card_revealed: null,
-                    current_pot: null,
-                    current_bet: null,
-                    player: [null, null, null, null],
-                    call_player: [],
-                    fold_player: [],
-                    winner: null
-                })
+                    pot: [],
+                    current_pot_price: null
+                });
             }
         }), {
-        name: 'gameState',
-        storage: createJSONStorage(() => localStorage)
+        name: 'potState',
+        storage: createJSONStorage(() => sessionStorage)
     }
     )
 );
+
+// pot: [
+//                 {
+//                     pot_number: 1,
+//                     price: 2000,
+//                     participant: [1, 2, 3, 4],
+//                 },
+//                 {
+//                     pot_number: 2,
+//                     price: 2000,
+//                     participant: [1, 4],
+//                 },
+//             ],
+//             current_pot_price: 2000,

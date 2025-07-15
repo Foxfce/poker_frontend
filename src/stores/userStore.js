@@ -1,7 +1,8 @@
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 import {
-    login
+    login,
+    register
 } from '../services/authService';
 import isTokenExpired from "../utils/tokenUtils";
 import {
@@ -11,16 +12,18 @@ import {
 export const useUserStore = create(
     persist(
         (set, get) => ({
-            user: { // Use for testing only
-                nick_name : 'Bobby', 
-                player_id : 'AbsH',
-            },
+            user: {},
             token: null,
+            register: async (username, password) => {
+                const response = await register(username, password);
+                return response;
+            },
             login: async (username, password) => {
                 const accessToken = await login(username, password);
                 set({ token: accessToken })
 
                 // Fetch user
+                get().getUser();
             },
             logout: () => set({ user: null, token: null }),
             getUser: async () => {
@@ -39,24 +42,21 @@ export const useUserStore = create(
                 } catch (error) {
                     get().logout();
                 }
-            }
+            },
+            setUser: (user) => {
+                set({ user: user });
+            },
 
         }), {
         name: 'userState',
-        storage: createJSONStorage(() => localStorage)
+        storage: createJSONStorage(() => sessionStorage)
     }
     )
 );
 
-// id              Int         @id @default(autoincrement())
-//   username        String?     @unique @db.VarChar(100)
-//   nick_name       String?     @db.VarChar(100)
-//   player_id       String      @unique @db.VarChar(5)
-//   password        String?     @db.Text
-//   role            Player_Role @default(GUEST)
-//   profile_picture String?
-//   about           String?
-//   current_pocket  Float       @default(2000)
-//   total_win       Int?        @default(0)
-//   total_losees    Int?        @default(0)
-//   total_earning
+ // Form
+//  {
+     // nick_name : 'Bobby', 
+     // player_id : 'AbsH',
+     // image : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRajB3ZHFMBFfBiAAhjevGDY6g3Qyym1IJ0c2AmuNP9lSYblFxz29VPeHzauMPBfzBxmNE&usqp=CAU'
+//  }

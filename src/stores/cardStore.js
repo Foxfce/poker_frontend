@@ -6,17 +6,20 @@ const { Hand } = await import('pokersolver');
 export const useCardStore = create(
     persist(
         (set, get) => ({
-            community_card: ["2s", "3s", "4s", "9h", "8c"],
-            player1: ["Js", "Ts"],
-            player2: ["2h", "2c"],
-            player3: ["Qs", "Ks"],
-            player4: [null, null],
+            community_card: [],
+            player1: [],
+            player2: [],
+            player3: [],
+            player4: [],
             player1_rank: null,
             player2_rank: null,
             player3_rank: null,
             player4_rank: null,
             setCommunityCard: async (card) => {
-                set({ [objectValue]: card });
+                set({ community_card: card });
+            },
+            setPlayerCard: async (p1, p2, p3, p4) => {
+                set({ player1: p1, player2: p2, player3: p3, player4: p4 })
             },
             setPlayerCard: (playerNumber, card) => {
                 if (playerNumber < 1 || playerNumber > 4) return console.error('Player number invalid');
@@ -59,12 +62,21 @@ export const useCardStore = create(
                 const players = usePlayerStore.getState().players
 
                 const winner = players.find((player) => player?.tableId === winnerTableId); // (player) => player?.tableId === winnerTableId
-                console.log(winner);
                 return winner
             },
         }), {
         name: 'cardState',
-        storage: createJSONStorage(() => localStorage)
+        storage: createJSONStorage(() => sessionStorage)
     }
     )
 );
+
+// community_card: ["2s", "3s", "4s", "9h", "8c"],
+//             player1: ["Js", "Ts"],
+//             player2: ["2h", "2c"],
+//             player3: ["Qs", "Ks"],
+//             player4: [null, null],
+//             player1_rank: null,
+//             player2_rank: null,
+//             player3_rank: null,
+//             player4_rank: null,

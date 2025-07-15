@@ -10,29 +10,79 @@ import { useSeatStore } from "../../stores/seatStore"
 import { useGameStore } from "../../stores/gameStore"
 import { useUserStore } from "../../stores/userStore"
 import { useParams } from "react-router"
-import { usePlayerStore } from "../../stores/playerStore"
+import PotDisplay from "../../components/table/PotDisplay"
+import { usePotStore } from "../../stores/potStore"
+import { useNavigate } from "react-router"
+
+import {
+    socket,
+    handleConnect,
+    handleDisconnected,
+    handleReconnected,
+    handleTrulyDisconnected,
+    handleUpdateState,
+} from '../../utils/socket.js';
+import { usePlayerStore } from "../../stores/playerStore.js"
+import { useChatStore } from "../../stores/chatStore.js"
 
 function TableSession() {
     const { tableId } = useParams();
+    const navigate = useNavigate();
 
     const user = useUserStore(state => state.user);
+    const setUser = useUserStore(state => state.setUser);
     const community_card = useCardStore(state => state?.community_card);
     const tableSeat = useSeatStore(state => state?.tableSeat);
     const gameRound = useGameStore(state => state?.round);
     const playerTurn = useGameStore(state => state?.player_turn);
-    const checkWinner = useCardStore(state => state.checkWinner);
+    const pot = usePotStore(state => state.pot);
 
-    const players = usePlayerStore(state => state?.players);
-
-
+    const updatePlayerTurn = useGameStore(state => state.updatePlayerTurn);
 
     useEffect(() => {
+        socket.on('connect', handleConnect);
+        socket.on('disconnect', handleDisconnected);
+        socket.on('playerReconnected', handleReconnected);
+        socket.on('playerTrulyDisconnected', handleTrulyDisconnected);
 
-        checkWinner([1, 2, 3, 4]);
+        //Important state update overall
+        socket.on('sendUpdateState', handleUpdateState);
+
+        socket.emit('getUpdatedState', { tableId }, (response) => {
+            if (response?.success) {
+                console.log(response?.message);
+                return;
+            }
+            console.error(response?.message);
+        });
+
+        return () => {
+            socket.off('connect', handleConnect);
+            socket.off('disconnect', handleDisconnected);
+            socket.off('playerReconnected', handleReconnected);
+            socket.off('playerTrulyDisconnected', handleTrulyDisconnected);
+            socket.off('sendUpdateState', handleUpdateState);
+            socket.emit("leaveTable", { tableId: tableId });
+        }
     }, []);
 
+    const leaveTable = () => {
+
+        socket.emit("leaveTable", { tableId: tableId });
+        navigate('/table');
+    }
+
+    const sitOut = () => {
+        // Sit out can be queue up when game end leave the chair
+    }
+
     return (
-        <div className="flex h-screen w-screen overflow-hidden">
+        <div className="flex h-screen w-screen overflow-hidden relative">
+            <div className="absolute flex gap-4">
+                <button disabled={gameRound ? true : false} className="btn btn-error text-white" onClick={() => leaveTable()}>Exit</button>
+                <button disabled={gameRound ? true : false} className="btn btn-error text-white" onClick={() => sitOut()}>Sit Out</button>
+            </div>
+
             <div className="h-full w-full absolute bg-black z-[-1]" />
             <img src={pokertable} alt="table" className="absolute h-full w-1/1 -translate-x-1/2 z-[-1]" />
 
@@ -53,10 +103,10 @@ function TableSession() {
                 </div>
 
                 {/* Community Card */}
-                <div className="absolute top-3/8 left-1/15 flex flex-col gap-2 items-center h-fit w-fit">
+                {gameRound ? <div className="absolute top-3/8 left-1/15 flex flex-col gap-2 items-center h-fit w-fit">
                     {/* POT */}
-                    <div className="flex justify-center py-1 px-16 rounded-full bg-black ">
-                        <span className="text-amber-400 font-bold text-2xl">{'Pot : 1000'}</span>
+                    <div className="flex justify-center items-center py-1 px-16 rounded-full bg-black relative">
+                        {pot && <PotDisplay />}
                     </div>
 
                     {/* Community Card */}
@@ -67,13 +117,17 @@ function TableSession() {
                     {/* Game Stat */}
                     <div className="flex gap-4 justify-center py-1 px-16 rounded-full bg-black ">
                         <span className="text-white font-bold text-xl">#</span>
-                        <span className="text-amber-400 font-bold text-xl">Your Turn</span>
+                        <span className="text-amber-400 font-bold text-xl">{playerTurn.playerName}</span>
                         <span className="text-white font-bold text-xl">Deals</span>
                         <span className="text-amber-400 font-bold text-xl">1</span>
                         <span className="text-white font-bold text-xl">Rounds</span>
-                        <span className="text-amber-400 font-bold text-xl">1</span>
+                        <span className="text-amber-400 font-bold text-xl">{gameRound}</span>
                     </div>
                 </div>
+                    : <button
+                        className="absolute top-3/6 left-1/8 btn btn-xl bg-noirRed-600 border-gray-400 border-6 shadow shadow-noirRed-600 text-white hover:bg-noirRed-700">
+                        START GAME
+                    </button>}
                 {/* Community Card */}
 
                 {/*Player Action button */}

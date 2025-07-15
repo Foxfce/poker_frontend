@@ -14,6 +14,7 @@ function PlayerStat(props) {
     const evaluatedHand = useCardStore(state => state.evaluatedHand);
 
     const playerTurn = useGameStore(state => state?.player_turn);
+    const winner = useGameStore(state => state?.winner)
 
     useEffect(() => {
         evaluatedHand(playerNumber);
@@ -25,7 +26,7 @@ function PlayerStat(props) {
             {/* Picture */}
             <div className='relative'>
                 <Participant imgSrc={player?.image} className='w-26 rounded-full bg-gray-200' />
-                {(playerTurn === player.id) && <div className='absolute -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 w-full h-full border rounded-full border-amber-400 border-6' />}
+                {(playerTurn?.playerId === player?.id)? <div className='absolute -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 w-full h-full border rounded-full border-amber-400 border-6' />:null}
             </div >
 
             {/* Stat */}
@@ -33,11 +34,11 @@ function PlayerStat(props) {
 
                 {/* Only user can see  */}
                 {handValue && (< div className="absolute -translate-y-1/2 -left-2 -top-18 z-[1] flex flex-col items-center py-1 px-2 gap-1 border-4 border-gray-400 bg-gray-950 rounded-full w-[200px]" >
-                    <span className="text-lg text-gray-300 font-semibold">{handValue}</span>
+                    <span className="text-lg text-gray-300 font-semibold">{`${winner && 'WINNER :'} ${handValue}`}</span>
                 </div >)}
 
                 <div className="absolute -translate-y-1/2 -left-4 -top-40 flex gap-4">
-                    {player_card.map((el, index) => <CardFace key={(index + 1)} cardRank={el} />)}
+                    {player_card ? player_card.map((el, index) => <CardFace key={(index + 1)} cardRank={el} />): null}
 
                 </div>
 

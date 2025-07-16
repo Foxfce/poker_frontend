@@ -3,7 +3,7 @@ import pokertable from '../../assets/Poker_table_red.jpg'
 import CardFace from "../../components/table/CardFace"
 import { useCardStore } from "../../stores/cardStore"
 import PlayerStat from "../../components/table/PlayerStat"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import PlayerAction from "../../components/table/PlayerAction"
 import EmptySeat from "../../components/table/EmptySeat"
 import { useSeatStore } from "../../stores/seatStore"
@@ -39,8 +39,11 @@ function TableSession() {
 
     const updatePlayerTurn = useGameStore(state => state.updatePlayerTurn);
 
+    const [playersOnSeat , setPlayersOnSeat] = useState(0);
+
+    //Socket useEffect on start
     useEffect(() => {
-        socket.on('connect', handleConnect);
+        socket.on('connect', handleConnect({tableId}));
         socket.on('disconnect', handleDisconnected);
         socket.on('playerReconnected', handleReconnected);
         socket.on('playerTrulyDisconnected', handleTrulyDisconnected);
@@ -65,6 +68,12 @@ function TableSession() {
             socket.emit("leaveTable", { tableId: tableId });
         }
     }, []);
+
+    useEffect(()=>{
+        const number = tableSeat.filter((player)=> player !== null).length;
+        setPlayersOnSeat(number);
+
+    },[tableSeat])
 
     const leaveTable = () => {
 
@@ -125,7 +134,8 @@ function TableSession() {
                     </div>
                 </div>
                     : <button
-                        className="absolute top-3/6 left-1/8 btn btn-xl bg-noirRed-600 border-gray-400 border-6 shadow shadow-noirRed-600 text-white hover:bg-noirRed-700">
+                    disabled = { playersOnSeat < 2 ? true : false  }
+                        className={`absolute top-3/6 left-1/8 btn btn-xl ${playersOnSeat ? 'bg-noirRed-600' : 'bg-gray-700'} border-gray-400 border-6 shadow shadow-noirRed-600 text-white ${playersOnSeat >=2 ? 'hover:bg-noirRed-700': null}`}>
                         START GAME
                     </button>}
                 {/* Community Card */}

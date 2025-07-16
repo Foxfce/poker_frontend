@@ -29,6 +29,8 @@ function TableLobby() {
   const [showLogin, setShowLogin] = useState(false);
   const [showRegister, setShowRegister] = useState(false);
 
+  const [isOnQueue, setIsOnQueue] = useState(false);
+
   const user = useUserStore(state => state.user);
   const token = useUserStore(state => state.token);
   const setUser = useUserStore(state => state.setUser);
@@ -47,6 +49,7 @@ function TableLobby() {
     }
 
     socket.on('quickJoinTableAssignedRoom', ({ tableId, message, tableData }) => {
+      setIsOnQueue(false);
       console.log(message);
 
       usePlayerStore.getState().updateAllPlayers(tableData.players);
@@ -69,7 +72,7 @@ function TableLobby() {
   }, [])
 
   const hdlClickQuickJoin = () => {
-    handleQuickJoin(user);
+    handleQuickJoin(user,setIsOnQueue);
   }
 
   const hdlClickJoinTable = () => {
@@ -119,8 +122,10 @@ function TableLobby() {
           </div>
 
           <button
-            className="btn btn-xl w-full text-white bg-noirRed-600 border-noirRed-600 shadow shadow-noirRed-600 hover:bg-noirRed-700"
+            disabled = {isOnQueue}
+            className="relative btn btn-xl w-full text-white bg-noirRed-600 border-noirRed-600 shadow shadow-noirRed-600 hover:bg-noirRed-700"
             onClick={hdlClickQuickJoin}>
+               {isOnQueue && <span className="loading loading-spinner absolute right-5/6 text-noirRed-600"></span>}
             QUICK JOIN
           </button>
           <button

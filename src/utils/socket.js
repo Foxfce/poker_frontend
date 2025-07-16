@@ -39,7 +39,7 @@ export const handleUpdateState = ({ tableData }) => {
 export const handleConnect = () => {
     if (socket.recovered) {
         console.log('Successfully recovered previous session!')
-        socket.emit('resyncGameData', { roomId: tableId });
+        socket.emit('resyncGameData', { tableId: tableId });
         return;
     }
     console.log('New connection or unrecover session');
@@ -93,10 +93,11 @@ export const handleJoinPrivateTable = (tableId, password, userData) => {
     });
 }
 
-export const handleQuickJoin = (userData) => {
+export const handleQuickJoin = (userData,setIsOnQueue) => {
     const { nick_name, player_id, role, image = null } = userData;
     socket.emit('quickJoinTable', { nick_name, player_id, role, image }, (response) => {
         if (response?.success) {
+            setIsOnQueue(true);
             console.log(response?.message);
             return;
         }

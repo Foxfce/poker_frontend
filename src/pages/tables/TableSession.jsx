@@ -40,6 +40,7 @@ function TableSession() {
     const updatePlayerTurn = useGameStore(state => state.updatePlayerTurn);
 
     const [playersOnSeat , setPlayersOnSeat] = useState(0);
+    const isOnSeat = useSeatStore(state => state.isOnSeat);
 
     //Socket useEffect on start
     useEffect(() => {
@@ -99,16 +100,16 @@ function TableSession() {
             <div className={`flex grow-4 min-w-[375px] relative`}>
 
                 <div className="absolute top-5/6 left-1/8 flex items-center h-fit w-fit">
-                    {tableSeat[0] ? <PlayerStat id={tableSeat[0]} playerNumber='1' /> : (gameRound || <EmptySeat seatNumber='1' />)}
+                    {tableSeat[0] ? <PlayerStat id={tableSeat[0]} playerNumber='1' /> : (isOnSeat || gameRound || <EmptySeat seatNumber='1' />)}
                 </div>
                 <div className="absolute top-2/9 left-1/8 flex items-center h-fit w-fit">
-                    {tableSeat[1] ? <PlayerStat id={tableSeat[1]} playerNumber='2' /> : (gameRound || <EmptySeat seatNumber='2' />)}
+                    {tableSeat[1] ? <PlayerStat id={tableSeat[1]} playerNumber='2' /> : (isOnSeat || gameRound || <EmptySeat seatNumber='2' />)}
                 </div>
                 <div className="absolute top-2/6 left-1/2 flex items-center h-fit w-fit">
-                    {tableSeat[2] ? <PlayerStat id={tableSeat[2]} playerNumber='3' /> : (gameRound || <EmptySeat seatNumber='3' />)}
+                    {tableSeat[2] ? <PlayerStat id={tableSeat[2]} playerNumber='3' /> : (isOnSeat || <EmptySeat seatNumber='3' />)}
                 </div>
                 <div className="absolute top-4/6 left-1/2 flex items-center h-fit w-fit">
-                    {tableSeat[3] ? <PlayerStat id={tableSeat[3]} playerNumber='4' /> : (gameRound || <EmptySeat seatNumber='4' />)}
+                    {tableSeat[3] ? <PlayerStat id={tableSeat[3]} playerNumber='4' /> : (isOnSeat||gameRound || <EmptySeat seatNumber='4' />)}
                 </div>
 
                 {/* Community Card */}

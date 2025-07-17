@@ -5,6 +5,7 @@ export const useSeatStore = create(
     persist(
         (set, get) => ({
             tableSeat: [null, null, null, null],
+            isOnSeat: false,
             updateSeatState: (data) => {
                 set({ tableSeat: data })
             },
@@ -14,6 +15,7 @@ export const useSeatStore = create(
                 const newSeat = [...get().tableSeat];
                 newSeat.splice(+seatNumber - 1, 1, playerId);
                 set({ tableSeat: [...newSeat] });
+                if(get().tableSeat[seatNumber-1]) set({isOnSeat : true});
             },
             leaveSeat: (seatNumber) => {
                 get().updateNumberSeat(seatNumber);

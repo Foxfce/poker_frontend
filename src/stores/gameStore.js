@@ -44,6 +44,8 @@ export const useGameStore = create(
             },
             updateGameState: (data) => {
                 set({
+                    tableId : data.tableId,
+                    password : data.password,
                     round: data.round,
                     card_revealed: data.card_revealed,
                     current_pot: data.current_pot,

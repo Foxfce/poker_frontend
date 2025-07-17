@@ -1,15 +1,22 @@
 import { AddIcon } from "../../icons"
+import { useGameStore } from "../../stores/gameStore";
 import { useSeatStore } from "../../stores/seatStore";
 import { useUserStore } from "../../stores/userStore";
+import { socket } from "../../utils/socket";
 
 function EmptySeat(props) {
     const { seatNumber } = props;
     const updateNumberSeat = useSeatStore(state => state.updateNumberSeat);
-    const playerId = useUserStore(state => state.user?.player_id);
+    const player_id = useUserStore(state => state.user?.player_id);
+    const tableId = useGameStore(state => state.tableId)
 
     const hdlJoinSeat = () => {
-        console.log(playerId);
-        updateNumberSeat(seatNumber, playerId);
+        socket.emit('joinSeat', { tableId, player_id, seatNumber }, (response) => {
+            if (response.success) {
+                updateNumberSeat(seatNumber, player_id);
+            }
+            console.log(response.message);
+        })
     }
 
     return (

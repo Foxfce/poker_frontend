@@ -22,6 +22,8 @@ export const useGameStore = create(
             player_turn: null, // will take turn if user.player_id != player_turn prevent emit action { playerId: 'AbsH', playerName: 'Hello' }
             winner: null,
             startGame: () => {
+                const user_id = useUserStore.getState().user?.player_id;
+                socket.emit('gameStart',{player_id : user_id, tableId : get().tableId});
 
                 // All this should be on server side and emit back
                 set({

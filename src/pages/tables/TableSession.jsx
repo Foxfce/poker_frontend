@@ -39,12 +39,12 @@ function TableSession() {
 
     const updatePlayerTurn = useGameStore(state => state.updatePlayerTurn);
 
-    const [playersOnSeat , setPlayersOnSeat] = useState(0);
+    const [playersOnSeat, setPlayersOnSeat] = useState(null);
     const isOnSeat = useSeatStore(state => state.isOnSeat);
 
     //Socket useEffect on start
     useEffect(() => {
-        socket.on('connect', handleConnect({tableId}));
+        socket.on('connect', handleConnect({ tableId }));
         socket.on('disconnect', handleDisconnected);
         socket.on('playerReconnected', handleReconnected);
         socket.on('playerTrulyDisconnected', handleTrulyDisconnected);
@@ -70,11 +70,11 @@ function TableSession() {
         }
     }, []);
 
-    useEffect(()=>{
-        const number = tableSeat.filter((player)=> player !== null).length;
+    useEffect(() => {
+        const number = tableSeat.filter((player) => player !== null).length;
         setPlayersOnSeat(number);
-
-    },[tableSeat])
+        
+    }, [tableSeat])
 
     const leaveTable = () => {
 
@@ -109,7 +109,7 @@ function TableSession() {
                     {tableSeat[2] ? <PlayerStat id={tableSeat[2]} playerNumber='3' /> : (isOnSeat || <EmptySeat seatNumber='3' />)}
                 </div>
                 <div className="absolute top-4/6 left-1/2 flex items-center h-fit w-fit">
-                    {tableSeat[3] ? <PlayerStat id={tableSeat[3]} playerNumber='4' /> : (isOnSeat||gameRound || <EmptySeat seatNumber='4' />)}
+                    {tableSeat[3] ? <PlayerStat id={tableSeat[3]} playerNumber='4' /> : (isOnSeat || gameRound || <EmptySeat seatNumber='4' />)}
                 </div>
 
                 {/* Community Card */}
@@ -135,8 +135,8 @@ function TableSession() {
                     </div>
                 </div>
                     : <button
-                    disabled = { playersOnSeat < 2 ? true : false  }
-                        className={`absolute top-3/6 left-1/8 btn btn-xl ${playersOnSeat ? 'bg-noirRed-600' : 'bg-gray-700'} border-gray-400 border-6 shadow shadow-noirRed-600 text-white ${playersOnSeat >=2 ? 'hover:bg-noirRed-700': null}`}>
+                        disabled={playersOnSeat < 2}
+                        className={`absolute z-3 top-3/6 left-1/8 btn btn-xl bg-noirRed-600 hover:bg-noirRed-700 shadow shadow-noirRed-600 border-gray-400 border-6 text-white disabled:!bg-gray-700 disabled:shadow-none`}>
                         START GAME
                     </button>}
                 {/* Community Card */}

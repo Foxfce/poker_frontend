@@ -60,10 +60,9 @@ function ChatPanel() {
             </div>
 
             {/* Participant logo */}
-            <div className="flex items-center gap-4 bg-gray-400 w-full h-fit py-4 px-4">
+            <div className="flex items-center gap-4 bg-gray-400 w-full h-22 py-4 px-4">
 
-                {players ? players.map((player, index) => <Participant key={index} imgSrc={player?.image} className='w-18 rounded-full bg-gray-200' />) : null}
-
+                {players ? players.map((player, index) => player && <Participant key={index} imgSrc={player?.image} className='w-18 rounded-full bg-gray-200' />) : null}
 
             </div>
 

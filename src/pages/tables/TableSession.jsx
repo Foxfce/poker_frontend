@@ -41,6 +41,8 @@ function TableSession() {
 
     const [playersOnSeat, setPlayersOnSeat] = useState(null);
     const isOnSeat = useSeatStore(state => state.isOnSeat);
+    const [startCountDown, setStartCountDown] = useState(false);
+    const [countdownNumber, setCountdownNumber] = useState(null);
 
     //Socket useEffect on start
     useEffect(() => {
@@ -73,7 +75,7 @@ function TableSession() {
     useEffect(() => {
         const number = tableSeat.filter((player) => player !== null).length;
         setPlayersOnSeat(number);
-        
+
     }, [tableSeat])
 
     const leaveTable = () => {
@@ -84,13 +86,43 @@ function TableSession() {
 
     const sitOut = () => {
         // Sit out can be queue up when game end leave the chair
+        console.log('sitout');
     }
+
+    const countDown = () => {
+        setStartCountDown(true);
+        console.log('hello');
+    }
+
+    // Tricker when socket.on('gameStart') setCounterNumber
+    useEffect(() => {
+        if (!startCountDown) return;
+
+        const setTimer = 8;
+
+        let timer = setTimer;
+        setCountdownNumber(timer)
+        const countDownInterval = setInterval(() => {
+            timer--;
+            setCountdownNumber(timer);
+
+            if (timer <= 0) {
+                clearInterval(countDownInterval);
+                setStartCountDown(false);
+                setCountdownNumber(setTimer);
+                return;
+            }
+        }, 1000);
+
+        return () => clearInterval(countDownInterval);
+    }, [startCountDown])
 
     return (
         <div className="flex h-screen w-screen overflow-hidden relative">
-            <div className="absolute flex gap-4">
+            <div className="absolute flex gap-4 z-2">
                 <button disabled={gameRound ? true : false} className="btn btn-error text-white" onClick={() => leaveTable()}>Exit</button>
                 <button disabled={gameRound ? true : false} className="btn btn-error text-white" onClick={() => sitOut()}>Sit Out</button>
+                <button disabled={gameRound ? true : false} className="btn btn-error text-white" onClick={() => countDown()}>Countdown</button>
             </div>
 
             <div className="h-full w-full absolute bg-black z-[-1]" />
@@ -133,13 +165,23 @@ function TableSession() {
                         <span className="text-white font-bold text-xl">Rounds</span>
                         <span className="text-amber-400 font-bold text-xl">{gameRound}</span>
                     </div>
+                    {/* Community Card */}
                 </div>
-                    : <button
+                    : !startCountDown ? <button
                         disabled={playersOnSeat < 2}
                         className={`absolute z-3 top-3/6 left-1/8 btn btn-xl bg-noirRed-600 hover:bg-noirRed-700 shadow shadow-noirRed-600 border-gray-400 border-6 text-white disabled:!bg-gray-700 disabled:shadow-none`}>
                         START GAME
-                    </button>}
-                {/* Community Card */}
+                    </button> :
+                        <div className="absolute z-3 top-3/6 left-1/8 flex flex-col gap-4 justify-center items-center">
+                            <div className="flex justify-center py-1 px-16 rounded-full bg-black">
+                                <span className="text-white font-bold text-xl">{`COUNTDOWN : ${countdownNumber}`}</span>
+                            </div>
+                            <button
+                                className={`btn btn-xl w-[120px] h-10 rounded-full bg-noirRed-600 hover:bg-noirRed-700 shadow-noirRed-600 border-gray-400 border-6 text-white text-sm`}>
+                                CANCEL
+                            </button>
+                        </div>
+                }
 
                 {/*Player Action button */}
                 <div className="absolute bottom-1/15 left-1/2">

@@ -177,7 +177,8 @@ function TableSession() {
                                 <span className="text-white font-bold text-xl">{`COUNTDOWN : ${countdownNumber}`}</span>
                             </div>
                             <button
-                                className={`btn btn-xl w-[120px] h-10 rounded-full bg-noirRed-600 hover:bg-noirRed-700 shadow-noirRed-600 border-gray-400 border-6 text-white text-sm`}>
+                                className={`btn btn-xl w-[120px] h-10 rounded-full bg-noirRed-600 hover:bg-noirRed-700 shadow-noirRed-600 border-gray-400 border-6 text-white text-sm`}
+                            >
                                 CANCEL
                             </button>
                         </div>

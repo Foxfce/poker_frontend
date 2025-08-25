@@ -43,8 +43,8 @@ export const useUserStore = create(
                     get().logout();
                 }
             },
-            setUser: (user) => {
-                set({ user: user });
+            setUser: (user,token) => {
+                set({ user: user, token : token });
             },
 
         }), {

@@ -13,8 +13,6 @@ function App() {
       console.log('Token is expired');
       logout();
     }
-
-    
   }, []);
   
   return (

@@ -23,7 +23,7 @@ import { useChatStore } from "../../stores/chatStore";
 function TableLobby() {
   const [resetForm, setResetForm] = useState(false);
 
-  const navi = useNavigate();
+  const navigate = useNavigate();
   const [showJoinTable, setShowJoinTable] = useState(false);
   const [showCreateTable, setShowCreateTable] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
@@ -37,21 +37,11 @@ function TableLobby() {
 
 
 
-  useEffect(() => {
-
-    if (!token) {
-      socket.emit('createGuestPlayer');
-
-      socket.on('guestPlayerCreated', ({ nick_name, player_id, role }) => {
-        const userData = { nick_name, player_id, role, image: null }
-        setUser(userData);
-      });
-    }
-
+  useEffect(() => {    
     socket.on('quickJoinTableAssignedRoom', ({ tableId, message, tableData }) => {
       setIsOnQueue(false);
       console.log(message);
-
+      
       usePlayerStore.getState().updateAllPlayers(tableData.players);
       useGameStore.getState().updateGameState(tableData.gameState);
       usePotStore.getState().updatePotState(tableData.potState);
@@ -60,19 +50,18 @@ function TableLobby() {
       useCardStore.getState().setCommunityCard(tableData.community_card);
       useCardStore.getState().setPlayerCard(tableData.player1, tableData.player2, tableData.player3, tableData.player4)
       useChatStore.getState().updateChatState(tableData.chatState);
-
-      navi(`/table/${tableId}`);
+      
+      navigate(`/table/${tableId}`);
     });
-
+    if (!socket.connected) socket.connect();
+    
     return () => {
-      socket.off('guestPlayerCreated')
       socket.off('quickJoinTableAssignedRoom')
     };
-
-  }, [])
+  }, []);
 
   const hdlClickQuickJoin = () => {
-    handleQuickJoin(user,setIsOnQueue);
+    handleQuickJoin(user, setIsOnQueue);
   }
 
   const hdlClickJoinTable = () => {
@@ -122,10 +111,10 @@ function TableLobby() {
           </div>
 
           <button
-            disabled = {isOnQueue}
+            disabled={isOnQueue}
             className="relative btn btn-xl w-full text-white bg-noirRed-600 border-noirRed-600 shadow shadow-noirRed-600 hover:bg-noirRed-700"
             onClick={hdlClickQuickJoin}>
-               {isOnQueue && <span className="loading loading-spinner absolute right-5/6 text-noirRed-600"></span>}
+            {isOnQueue && <span className="loading loading-spinner absolute right-5/6 text-noirRed-600"></span>}
             QUICK JOIN
           </button>
           <button
@@ -140,7 +129,7 @@ function TableLobby() {
           </button>
           <button
             className="btn btn-xl w-full text-white bg-gray-800 border-gray-800 shadow shadow-gray-900 hover:bg-gray-700 "
-            onClick={() => navi('/news')}>
+            onClick={() => navigate('/news')}>
             LEAVE
           </button>
         </div>
